@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "DivideAi",
-    "slug": "DivideAi",
+    "name": "Split It",
+    "slug": "split-it",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
