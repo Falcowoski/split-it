@@ -77,13 +77,13 @@ export const Toast = ({
     return (
         <Animated.View
             style={{ opacity: fadeAnim }}
-            className="absolute top-10 left-5 right-5 z-50"
+            className="absolute left-5 right-5 top-10 z-50"
         >
             <View
-                className={`flex-row items-center p-4 rounded-lg shadow-md ${getToastStyle()}`}
+                className={`flex-row items-center rounded-lg p-4 shadow-md ${getToastStyle()}`}
             >
                 <Feather name={getToastIcon()} size={24} color="#FFFFFF" />
-                <Text className="flex-1 ml-3 text-white font-medium">
+                <Text className="ml-3 flex-1 font-medium text-white">
                     {message}
                 </Text>
                 <TouchableOpacity onPress={onClose}>

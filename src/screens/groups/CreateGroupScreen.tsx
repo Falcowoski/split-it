@@ -37,8 +37,8 @@ export default function CreateGroupScreen() {
     };
 
     return (
-        <View className="flex-1 p-4 bg-neutral-50">
-            <Text className="text-xl font-bold mb-6">Adicionar Novo Grupo</Text>
+        <View className="flex-1 bg-neutral-50 p-4">
+            <Text className="mb-6 text-xl font-bold">Adicionar novo grupo</Text>
 
             <Controller
                 control={control}

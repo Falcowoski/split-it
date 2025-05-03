@@ -6,13 +6,16 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { expenseService } from '../../services/expenseService';
 import { userService } from '../../services/userService';
 import { paymentMethodService } from '../../services/paymentMethodService';
-import { User, PaymentMethod } from '../../types';
+import { User, PaymentMethod, Tag } from '../../types';
 import { LoadingIndicator } from '../../components/LoadingIndicator';
 import { RootStackParamList } from '../../navigation';
 import { TextField } from '../../components/ui/TextField';
 import { Button } from '../../components/ui/Button';
 import { SelectField } from '../../components/ui/SelectField';
 import { useToast } from '../../providers/ToastProvider';
+import { tagService } from '../../services/tagService';
+import { MultiSelectField } from '../../components/ui/MultiSelectField';
+import Animated from 'react-native-reanimated';
 
 type CreateExpenseScreenRouteProp = RouteProp<
     RootStackParamList,
@@ -24,6 +27,7 @@ type FormData = {
     amount: string;
     userId: string;
     paymentMethodId: string;
+    tags: Tag['id'][];
 };
 
 export default function CreateExpenseScreen() {
@@ -35,6 +39,7 @@ export default function CreateExpenseScreen() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState<User[]>([]);
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
 
     const {
         control,
@@ -47,6 +52,7 @@ export default function CreateExpenseScreen() {
             amount: '',
             userId: '',
             paymentMethodId: '',
+            tags: [],
         },
     });
 
@@ -54,13 +60,17 @@ export default function CreateExpenseScreen() {
         const loadData = async () => {
             try {
                 setLoading(true);
-                const [usersData, paymentMethodsData] = await Promise.all([
-                    userService.getAll(),
-                    paymentMethodService.getAll(),
-                ]);
+
+                const [usersData, paymentMethodsData, tagsData] =
+                    await Promise.all([
+                        userService.getAll(),
+                        paymentMethodService.getAll(),
+                        tagService.getAll(),
+                    ]);
 
                 setUsers(usersData);
                 setPaymentMethods(paymentMethodsData);
+                setTags(tagsData);
 
                 // Definir valores padrão se houver dados
                 if (usersData.length > 0) {
@@ -85,10 +95,8 @@ export default function CreateExpenseScreen() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setValue]);
 
-    // src/screens/expenses/CreateExpenseScreen.tsx (continuação)
     const onSubmit = async (data: FormData) => {
         try {
-            // Validar se há usuários e formas de pagamento cadastrados
             if (!data.userId) {
                 showToast(
                     'Selecione um usuário responsável pela despesa',
@@ -109,13 +117,16 @@ export default function CreateExpenseScreen() {
                 return;
             }
 
-            await expenseService.create({
-                group_id: groupId,
-                user_id: data.userId,
-                payment_method_id: data.paymentMethodId,
-                name: data.name,
-                amount,
-            });
+            await expenseService.create(
+                {
+                    group_id: groupId,
+                    user_id: data.userId,
+                    payment_method_id: data.paymentMethodId,
+                    name: data.name,
+                    amount,
+                },
+                data.tags,
+            );
 
             showToast('Despesa criada com sucesso', 'success');
             navigation.goBack();
@@ -132,11 +143,11 @@ export default function CreateExpenseScreen() {
     // Verificar se há usuários e formas de pagamento cadastrados
     if (users.length === 0 || paymentMethods.length === 0) {
         return (
-            <View className="flex-1 p-4 bg-neutral-50 items-center justify-center">
-                <Text className="text-xl font-bold mb-4">
+            <View className="flex-1 items-center justify-center bg-neutral-50 p-4">
+                <Text className="mb-4 text-xl font-bold">
                     Não é possível criar uma despesa
                 </Text>
-                <Text className="text-center mb-6 text-neutral-600">
+                <Text className="mb-6 text-center text-neutral-600">
                     {users.length === 0
                         ? 'É necessário cadastrar pelo menos um usuário.'
                         : ''}
@@ -159,10 +170,19 @@ export default function CreateExpenseScreen() {
         value: method.id,
     }));
 
+    const tagOptions = tags.map((tag) => ({
+        label: tag.name,
+        value: tag.id,
+    }));
+
     return (
-        <View className="flex-1 p-4 bg-neutral-50">
-            <Text className="text-xl font-bold mb-6">
-                Adicionar Nova Despesa
+        <Animated.ScrollView
+            className="flex-1 bg-neutral-50 p-4"
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator
+        >
+            <Text className="mb-6 text-xl font-bold">
+                Adicionar nova despesa
             </Text>
 
             <Controller
@@ -234,11 +254,24 @@ export default function CreateExpenseScreen() {
                 name="paymentMethodId"
             />
 
+            <Controller
+                control={control}
+                name="tags"
+                render={({ field: { value, onChange } }) => (
+                    <MultiSelectField
+                        label="Tags"
+                        options={tagOptions}
+                        selectedValues={value}
+                        onValuesChange={onChange}
+                    />
+                )}
+            />
+
             <Button
                 title="Salvar"
                 onPress={handleSubmit(onSubmit)}
                 className="mt-4"
             />
-        </View>
+        </Animated.ScrollView>
     );
 }

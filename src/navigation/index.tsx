@@ -36,7 +36,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const BottomTabBar = ({ navigation, state }: any) => (
-    <View className="flex-row bg-white border-t border-neutral-200">
+    <View className="flex-row border-t border-neutral-200 bg-white">
         {state.routes.map((route: any, index: number) => {
             const isFocused = state.index === index;
             let iconName: any;
@@ -56,18 +56,18 @@ const BottomTabBar = ({ navigation, state }: any) => (
             return (
                 <TouchableOpacity
                     key={index}
-                    className={`flex-1 py-3 items-center ${isFocused ? 'opacity-100' : 'opacity-60'}`}
+                    className={`flex-1 items-center py-3 ${isFocused ? 'opacity-100' : 'opacity-60'}`}
                     onPress={() => navigation.navigate(route.name)}
                 >
                     <Feather
                         name={iconName}
                         size={24}
-                        // eslint-disable-next-line prettier/prettier
-                        className={isFocused ? 'color-blue-500' : 'color-neutral-500'}
+                        // Colors: blue-500 and neutral-500
+                        color={isFocused ? '#3b82f6' : '#737373'}
                     />
 
                     <Text
-                        className={`text-xs mt-1 ${isFocused ? 'text-blue-500' : 'text-neutral-500'}`}
+                        className={`mt-1 text-xs ${isFocused ? 'text-blue-500' : 'text-neutral-500'}`}
                     >
                         {label}
                     </Text>

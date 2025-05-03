@@ -6,9 +6,9 @@ export const groupService = {
     async getAll(): Promise<Group[]> {
         const { data, error } = await supabase
             .from('groups')
-            .select('*')
+            .select('*, expenses(*)')
             .is('deleted_at', null)
-            .order('name');
+            .order('created_at', { ascending: false });
 
         if (error) throw error;
         return data as Group[];

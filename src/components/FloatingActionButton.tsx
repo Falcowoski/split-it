@@ -11,7 +11,7 @@ export const FloatingActionButton = ({
     onPress,
 }: FloatingActionButtonProps) => (
     <TouchableOpacity
-        className="absolute w-14 h-14 items-center justify-center right-5 bottom-5 rounded-full shadow-lg"
+        className="absolute bottom-5 right-5 h-14 w-14 items-center justify-center rounded-full shadow-lg"
         style={{ backgroundColor: '#3366FF' }}
         onPress={onPress}
     >

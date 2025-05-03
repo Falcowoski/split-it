@@ -1,6 +1,3 @@
-// src/types/index.ts
-
-// Usuário
 export type User = {
     id: string;
     name: string;
@@ -9,26 +6,36 @@ export type User = {
     deleted_at: string | null;
 };
 
-// Método de Pagamento
+/** @example '#RRGGBB' */
+type Color = string;
+
 export type PaymentMethod = {
     id: string;
     name: string;
-    color: string; // formato hexadecimal: #RRGGBB
+    color: Color;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
 };
 
-// Grupo
+export type Tag = {
+    id: string;
+    name: string;
+    color: Color;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+};
+
 export type Group = {
     id: string;
     name: string;
+    expenses?: Expense[];
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
 };
 
-// Despesa
 export type Expense = {
     id: string;
     group_id: string;
@@ -44,4 +51,5 @@ export type Expense = {
     group?: Group;
     user?: User;
     payment_method?: PaymentMethod;
+    tags?: Tag[];
 };

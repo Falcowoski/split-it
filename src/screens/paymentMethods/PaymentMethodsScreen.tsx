@@ -50,9 +50,9 @@ export default function PaymentMethodsScreen() {
     };
 
     const renderPaymentMethodItem = ({ item }: { item: PaymentMethod }) => (
-        <TouchableOpacity className="flex-row items-center p-4 border-b border-neutral-200">
+        <TouchableOpacity className="flex-row items-center border-b border-neutral-200 p-4">
             <View
-                className="w-6 h-6 rounded-full mr-3"
+                className="mr-3 h-6 w-6 rounded-full"
                 style={{ backgroundColor: item.color }}
             />
             <Text>{item.name}</Text>
@@ -76,7 +76,7 @@ export default function PaymentMethodsScreen() {
                     data={paymentMethods}
                     renderItem={renderPaymentMethodItem}
                     keyExtractor={(item) => item.id}
-                    className="flex-1 bg-white mx-4 mt-4 rounded-lg"
+                    className="mx-4 mt-4 flex-1 rounded-lg bg-white"
                 />
             )}
             <FloatingActionButton onPress={navigateToCreatePaymentMethod} />

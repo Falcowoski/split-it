@@ -1,4 +1,3 @@
-// src/components/ui/SelectField.tsx
 import React, { useState } from 'react';
 import {
     View,
@@ -65,10 +64,10 @@ export const SelectField = ({
                 transparent={true}
                 onRequestClose={() => setModalVisible(false)}
             >
-                <SafeAreaView className="flex-1 bg-black bg-opacity-50">
-                    <View className="flex-1 mt-auto">
-                        <View className="bg-white rounded-t-xl">
-                            <View className="flex-row justify-between items-center border-b border-neutral-200 p-4">
+                <SafeAreaView className="flex-1 bg-blue-50">
+                    <View className="mt-auto flex-1">
+                        <View className="rounded-t-xl bg-white">
+                            <View className="flex-row items-center justify-between border-b border-neutral-200 p-4">
                                 <Text className="text-lg font-medium">
                                     Selecione uma opção
                                 </Text>
@@ -88,7 +87,7 @@ export const SelectField = ({
                                 keyExtractor={(item) => item.value}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
-                                        className={`p-4 border-b border-neutral-100 ${
+                                        className={`border-b border-neutral-100 p-4 ${
                                             item.value === selectedValue
                                                 ? 'bg-blue-100'
                                                 : ''
@@ -101,7 +100,7 @@ export const SelectField = ({
                                         <Text
                                             className={
                                                 item.value === selectedValue
-                                                    ? 'text-blue-600 font-medium'
+                                                    ? 'font-medium text-blue-600'
                                                     : 'text-neutral-700'
                                             }
                                         >

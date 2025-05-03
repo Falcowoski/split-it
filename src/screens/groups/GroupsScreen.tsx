@@ -10,6 +10,7 @@ import { EmptyList } from '../../components/EmptyList';
 import { FloatingActionButton } from '../../components/FloatingActionButton';
 import { RootStackParamList } from '../../navigation';
 import { useToast } from '../../providers/ToastProvider';
+import { formatCurrency } from '../../helpers/Number.helper';
 
 type GroupsScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -46,14 +47,33 @@ export default function GroupsScreen() {
         }
     };
 
-    const renderGroupItem = ({ item }: { item: Group }) => (
-        <TouchableOpacity
-            className="p-4 border-b border-neutral-200"
-            onPress={() => navigation.navigate('GroupDetail', { id: item.id })}
-        >
-            <Text className="text-base">{item.name}</Text>
-        </TouchableOpacity>
-    );
+    const renderGroupItem = ({ item }: { item: Group }) => {
+        const totalAmount = item.expenses?.reduce(
+            (sum, expense) => sum + expense.amount,
+            0,
+        );
+
+        const total =
+            totalAmount !== undefined
+                ? formatCurrency(totalAmount)
+                : 'Desconhecido';
+
+        return (
+            <TouchableOpacity
+                className="border-b border-neutral-200 p-4"
+                onPress={() =>
+                    navigation.navigate('GroupDetail', { id: item.id })
+                }
+            >
+                <Text className="text-medium">{item.name}</Text>
+                <Text className="text-sm text-neutral-500">Total: {total}</Text>
+                <Text className="text-sm text-neutral-500">
+                    Quantidade de despesas:{' '}
+                    {item.expenses?.length ?? 'Desconhecido'}
+                </Text>
+            </TouchableOpacity>
+        );
+    };
 
     const navigateToCreateGroup = () => {
         navigation.navigate('CreateGroup');
@@ -72,7 +92,7 @@ export default function GroupsScreen() {
                     data={groups}
                     renderItem={renderGroupItem}
                     keyExtractor={(item) => item.id}
-                    className="flex-1"
+                    className="mx-4 mt-4 flex-1 rounded-lg bg-white"
                 />
             )}
             <FloatingActionButton onPress={navigateToCreateGroup} />

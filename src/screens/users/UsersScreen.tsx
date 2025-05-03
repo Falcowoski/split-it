@@ -47,7 +47,7 @@ export default function UsersScreen() {
     };
 
     const renderUserItem = ({ item }: { item: User }) => (
-        <TouchableOpacity className="p-4 border-b border-neutral-200">
+        <TouchableOpacity className="border-b border-neutral-200 p-4">
             <Text className="font-medium">{item.name}</Text>
             <Text className="text-sm text-neutral-500">
                 Criado em: {new Date(item.created_at).toLocaleDateString()}
@@ -72,7 +72,7 @@ export default function UsersScreen() {
                     data={users}
                     renderItem={renderUserItem}
                     keyExtractor={(item) => item.id}
-                    className="flex-1 bg-white mx-4 mt-4 rounded-lg"
+                    className="mx-4 mt-4 flex-1 rounded-lg bg-white"
                 />
             )}
             <FloatingActionButton onPress={navigateToCreateUser} />

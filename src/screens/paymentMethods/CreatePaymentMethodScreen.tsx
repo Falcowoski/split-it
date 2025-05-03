@@ -68,9 +68,9 @@ export default function CreatePaymentMethodScreen() {
     };
 
     return (
-        <View className="flex-1 p-4 bg-neutral-50">
-            <Text className="text-xl font-bold mb-6">
-                Adicionar Nova Forma de Pagamento
+        <View className="flex-1 bg-neutral-50 p-4">
+            <Text className="mb-6 text-xl font-bold">
+                Adicionar nova forma de pagamento
             </Text>
 
             <Controller
@@ -89,12 +89,12 @@ export default function CreatePaymentMethodScreen() {
                 name="name"
             />
 
-            <Text className="font-medium mb-2 text-neutral-700">Cor</Text>
-            <View className="flex-row flex-wrap mb-4">
+            <Text className="mb-2 font-medium text-neutral-700">Cor</Text>
+            <View className="mb-4 flex-row flex-wrap">
                 {PRESET_COLORS.map((color) => (
                     <TouchableOpacity
                         key={color}
-                        className={`w-10 h-10 m-1.5 rounded-full ${selectedColor === color ? 'border-2 border-neutral-800' : ''}`}
+                        className={`m-1.5 h-10 w-10 rounded-full ${selectedColor === color ? 'border-2 border-neutral-800' : ''}`}
                         style={{ backgroundColor: color }}
                         onPress={() => selectColor(color)}
                     />
