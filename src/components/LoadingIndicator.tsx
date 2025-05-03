@@ -1,18 +1,9 @@
 // src/components/LoadingIndicator.tsx
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Spinner } from '@ui-kitten/components';
+import { View, ActivityIndicator } from 'react-native';
 
 export const LoadingIndicator = () => (
-  <View style={styles.container}>
-    <Spinner size="large" />
-  </View>
+    <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#3366FF" />
+    </View>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

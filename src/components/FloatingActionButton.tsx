@@ -1,33 +1,20 @@
 // src/components/FloatingActionButton.tsx
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Icon } from '@ui-kitten/components';
+import { TouchableOpacity } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 type FloatingActionButtonProps = {
-  onPress: () => void;
+    onPress: () => void;
 };
 
-export const FloatingActionButton = ({ onPress }: FloatingActionButtonProps) => (
-  <TouchableOpacity style={styles.button} onPress={onPress}>
-    <Icon name="plus-outline" width={24} height={24} fill="#FFFFFF" />
-  </TouchableOpacity>
+export const FloatingActionButton = ({
+    onPress,
+}: FloatingActionButtonProps) => (
+    <TouchableOpacity
+        className="absolute w-14 h-14 items-center justify-center right-5 bottom-5 rounded-full shadow-lg"
+        style={{ backgroundColor: '#3366FF' }}
+        onPress={onPress}
+    >
+        <Feather name="plus" size={24} color="#FFFFFF" />
+    </TouchableOpacity>
 );
-
-const styles = StyleSheet.create({
-  button: {
-    position: 'absolute',
-    width: 56,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    right: 20,
-    bottom: 20,
-    backgroundColor: '#3366FF',
-    borderRadius: 28,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-});

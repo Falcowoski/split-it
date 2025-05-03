@@ -1,9 +1,10 @@
 // src/navigation/index.tsx
 import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
+import { Feather } from '@expo/vector-icons';
 
 // Importar telas
 import GroupsScreen from '../screens/groups/GroupsScreen';
@@ -17,74 +18,131 @@ import CreateExpenseScreen from '../screens/expenses/CreateExpenseScreen';
 
 // Definir tipos para navegação
 export type RootStackParamList = {
-  TabNavigator: undefined;
-  GroupDetail: { id: string };
-  CreateGroup: undefined;
-  CreateUser: undefined;
-  CreatePaymentMethod: undefined;
-  CreateExpense: { groupId: string };
+    TabNavigator: undefined;
+    GroupDetail: { id: string };
+    CreateGroup: undefined;
+    CreateUser: undefined;
+    CreatePaymentMethod: undefined;
+    CreateExpense: { groupId: string };
 };
 
 export type TabParamList = {
-  Groups: undefined;
-  Users: undefined;
-  PaymentMethods: undefined;
+    Groups: undefined;
+    Users: undefined;
+    PaymentMethods: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const BottomTabBar = ({ navigation, state }: any) => (
-  <BottomNavigation
-    selectedIndex={state.index}
-    onSelect={index => navigation.navigate(state.routeNames[index])}>
-    <BottomNavigationTab title='Grupos' icon={(props) => <Icon {...props} name='people-outline'/>}/>
-    <BottomNavigationTab title='Usuários' icon={(props) => <Icon {...props} name='person-outline'/>}/>
-    <BottomNavigationTab title='Pagamentos' icon={(props) => <Icon {...props} name='credit-card-outline'/>}/>
-  </BottomNavigation>
+    <View className="flex-row bg-white border-t border-neutral-200">
+        {state.routes.map((route: any, index: number) => {
+            const isFocused = state.index === index;
+            let iconName: any;
+            let label: string = '';
+
+            if (route.name === 'Groups') {
+                iconName = 'users';
+                label = 'Grupos';
+            } else if (route.name === 'Users') {
+                iconName = 'user';
+                label = 'Usuários';
+            } else if (route.name === 'PaymentMethods') {
+                iconName = 'credit-card';
+                label = 'Pagamentos';
+            }
+
+            return (
+                <TouchableOpacity
+                    key={index}
+                    className={`flex-1 py-3 items-center ${isFocused ? 'opacity-100' : 'opacity-60'}`}
+                    onPress={() => navigation.navigate(route.name)}
+                >
+                    <Feather
+                        name={iconName}
+                        size={24}
+                        // eslint-disable-next-line prettier/prettier
+                        className={isFocused ? 'color-blue-500' : 'color-neutral-500'}
+                    />
+
+                    <Text
+                        className={`text-xs mt-1 ${isFocused ? 'text-blue-500' : 'text-neutral-500'}`}
+                    >
+                        {label}
+                    </Text>
+                </TouchableOpacity>
+            );
+        })}
+    </View>
 );
 
 const TabNavigator = () => (
-  <Tab.Navigator tabBar={props => <BottomTabBar {...props} />}>
-    <Tab.Screen name="Groups" component={GroupsScreen} options={{ title: 'Grupos' }} />
-    <Tab.Screen name="Users" component={UsersScreen} options={{ title: 'Usuários' }} />
-    <Tab.Screen name="PaymentMethods" component={PaymentMethodsScreen} options={{ title: 'Formas de Pagamento' }} />
-  </Tab.Navigator>
+    <Tab.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
+        <Tab.Screen
+            name="Groups"
+            options={{ title: 'Grupos' }}
+            component={GroupsScreen}
+        />
+        <Tab.Screen
+            name="Users"
+            options={{ title: 'Usuários' }}
+            component={UsersScreen}
+        />
+        <Tab.Screen
+            name="PaymentMethods"
+            options={{ title: 'Métodos de pagamento' }}
+            component={PaymentMethodsScreen}
+        />
+    </Tab.Navigator>
 );
 
 export const AppNavigator = () => (
-  <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="TabNavigator" 
-        component={TabNavigator} 
-        options={{ headerShown: false }} 
-      />
-      <Stack.Screen 
-        name="GroupDetail" 
-        component={GroupDetailScreen} 
-        options={{ title: 'Detalhes do Grupo' }} 
-      />
-      <Stack.Screen 
-        name="CreateGroup" 
-        component={CreateGroupScreen} 
-        options={{ title: 'Novo Grupo' }} 
-      />
-      <Stack.Screen 
-        name="CreateUser" 
-        component={CreateUserScreen} 
-        options={{ title: 'Novo Usuário' }} 
-      />
-      <Stack.Screen 
-        name="CreatePaymentMethod" 
-        component={CreatePaymentMethodScreen} 
-        options={{ title: 'Nova Forma de Pagamento' }} 
-      />
-      <Stack.Screen 
-        name="CreateExpense" 
-        component={CreateExpenseScreen} 
-        options={{ title: 'Nova Despesa' }} 
-      />
-    </Stack.Navigator>
-  </NavigationContainer>
+    <NavigationContainer>
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: 'white',
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#EDF1F7',
+                },
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}
+        >
+            <Stack.Screen
+                name="TabNavigator"
+                component={TabNavigator}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="GroupDetail"
+                component={GroupDetailScreen}
+                options={{ title: 'Detalhes do grupo' }}
+            />
+            <Stack.Screen
+                name="CreateGroup"
+                component={CreateGroupScreen}
+                options={{ title: 'Novo grupo' }}
+            />
+            <Stack.Screen
+                name="CreateUser"
+                component={CreateUserScreen}
+                options={{ title: 'Novo usuário' }}
+            />
+            <Stack.Screen
+                name="CreatePaymentMethod"
+                component={CreatePaymentMethodScreen}
+                options={{ title: 'Nova forma de pagamento' }}
+            />
+            <Stack.Screen
+                name="CreateExpense"
+                component={CreateExpenseScreen}
+                options={{ title: 'Nova despesa' }}
+            />
+        </Stack.Navigator>
+    </NavigationContainer>
 );

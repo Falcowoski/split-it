@@ -1,29 +1,15 @@
 // src/components/ErrorMessage.tsx
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text, Icon } from '@ui-kitten/components';
+import { View, Text } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 type ErrorMessageProps = {
-  message: string;
+    message: string;
 };
 
 export const ErrorMessage = ({ message }: ErrorMessageProps) => (
-  <View style={styles.container}>
-    <Icon name="alert-triangle-outline" width={24} height={24} fill="#FF4747" />
-    <Text category="p2" status="danger" style={styles.text}>{message}</Text>
-  </View>
+    <View className="flex-row items-center p-2 bg-danger-100 rounded mb-4">
+        <Feather name="alert-triangle" size={24} color="#FF4747" />
+        <Text className="text-danger-500 ml-2">{message}</Text>
+    </View>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 8,
-    backgroundColor: '#FFE7D9',
-    borderRadius: 4,
-    marginBottom: 16,
-  },
-  text: {
-    marginLeft: 8,
-  },
-});
