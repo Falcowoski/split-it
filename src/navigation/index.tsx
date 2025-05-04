@@ -17,6 +17,8 @@ import CreatePaymentMethodScreen from '../screens/paymentMethods/CreatePaymentMe
 import CreateExpenseScreen from '../screens/expenses/CreateExpenseScreen';
 import { Expense } from '../types';
 import EditExpenseScreen from '../screens/expenses/EditExpenseScreen';
+import TagsScreen from '../screens/tags/TagsScreen';
+import CreateTagScreen from '../screens/tags/CreateTagScreen';
 
 // Definir tipos para navegação
 export type RootStackParamList = {
@@ -27,12 +29,14 @@ export type RootStackParamList = {
     CreatePaymentMethod: undefined;
     CreateExpense: { groupId: string };
     EditExpense: { id: Expense['id'] };
+    CreateTag: undefined;
 };
 
 export type TabParamList = {
     Groups: undefined;
     Users: undefined;
     PaymentMethods: undefined;
+    Tags: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -54,6 +58,9 @@ const BottomTabBar = ({ navigation, state }: any) => (
             } else if (route.name === 'PaymentMethods') {
                 iconName = 'credit-card';
                 label = 'Pagamentos';
+            } else if (route.name === 'Tags') {
+                iconName = 'tag';
+                label = 'Tags';
             }
 
             return (
@@ -87,15 +94,23 @@ const TabNavigator = () => (
             options={{ title: 'Grupos' }}
             component={GroupsScreen}
         />
+
         <Tab.Screen
             name="Users"
             options={{ title: 'Usuários' }}
             component={UsersScreen}
         />
+
         <Tab.Screen
             name="PaymentMethods"
             options={{ title: 'Métodos de pagamento' }}
             component={PaymentMethodsScreen}
+        />
+
+        <Tab.Screen
+            name="Tags"
+            options={{ title: 'Tags' }}
+            component={TagsScreen}
         />
     </Tab.Navigator>
 );
@@ -156,6 +171,12 @@ export const AppNavigator = () => (
                 name="EditExpense"
                 component={EditExpenseScreen}
                 options={{ title: 'Editar despesa' }}
+            />
+
+            <Stack.Screen
+                name="CreateTag"
+                component={CreateTagScreen}
+                options={{ title: 'Nova tag' }}
             />
         </Stack.Navigator>
     </NavigationContainer>

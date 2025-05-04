@@ -1,9 +1,9 @@
-// src/screens/paymentMethods/CreatePaymentMethodScreen.tsx
+// src/screens/tags/CreateTagScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import { paymentMethodService } from '../../services/paymentMethodService';
+import { tagService } from '../../services/tagService';
 import { TextField } from '../../components/ui/TextField';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../providers/ToastProvider';
@@ -34,7 +34,7 @@ const PRESET_COLORS = [
     '#bebebe',
 ];
 
-export default function CreatePaymentMethodScreen() {
+export default function CreateTagScreen() {
     const navigation = useNavigation();
     const { showToast } = useToast();
     const [selectedColor, setSelectedColor] = useState('#FF5252');
@@ -58,20 +58,18 @@ export default function CreatePaymentMethodScreen() {
 
     const onSubmit = async (data: FormData) => {
         try {
-            await paymentMethodService.create(data.name, data.color);
-            showToast('Forma de pagamento criada com sucesso', 'success');
+            await tagService.create(data.name, data.color);
+            showToast('Tag criada com sucesso', 'success');
             navigation.goBack();
         } catch (error) {
-            console.error('Erro ao criar forma de pagamento:', error);
-            showToast('Não foi possível criar a forma de pagamento', 'error');
+            console.error('Erro ao criar tag:', error);
+            showToast('Não foi possível criar a tag', 'error');
         }
     };
 
     return (
         <View className="flex-1 bg-neutral-50 p-4">
-            <Text className="mb-6 text-xl font-bold">
-                Adicionar nova forma de pagamento
-            </Text>
+            <Text className="mb-6 text-xl font-bold">Adicionar nova tag</Text>
 
             <Controller
                 control={control}
@@ -79,7 +77,7 @@ export default function CreatePaymentMethodScreen() {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextField
                         label="Nome"
-                        placeholder="Digite o nome (ex: Cartão Nubank)"
+                        placeholder="Digite o nome (ex: Mercado)"
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
