@@ -58,7 +58,10 @@ export default function GroupDetailScreen() {
     };
 
     const renderExpenseItem = ({ item }: { item: Expense }) => (
-        <TouchableOpacity className="flex-row items-center justify-between gap-4 border-b border-neutral-200 p-4">
+        <TouchableOpacity
+            className="flex-row items-center justify-between gap-4 border-b border-neutral-200 p-4"
+            onPress={() => navigation.navigate('EditExpense', { id: item.id })}
+        >
             <View className="flex-1 flex-row items-center">
                 <View
                     className="mr-3 h-6 w-6 self-start rounded-full"

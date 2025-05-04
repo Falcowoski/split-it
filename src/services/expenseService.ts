@@ -26,16 +26,16 @@ export const expenseService = {
         })) as Expense[];
     },
 
-    // TODO: Add `tags` property
     async getById(id: string): Promise<Expense | null> {
         const { data, error } = await supabase
             .from('expenses')
             .select(
                 `
-        *,
-        user:user_id(id, name),
-        payment_method:payment_method_id(id, name, color)
-      `,
+            *,
+            user:user_id(id, name),
+            payment_method:payment_method_id(id, name, color),
+            expense_tags:expense_tags(tags(id, name, color))
+            `,
             )
             .eq('id', id)
             .is('deleted_at', null)
@@ -43,7 +43,14 @@ export const expenseService = {
 
         if (error) throw error;
 
-        return data as Expense;
+        const expenseTags = data.expense_tags;
+
+        delete data.expense_tags;
+
+        return {
+            ...data,
+            tags: expenseTags.map((expenseTag: any) => expenseTag.tags),
+        } as Expense;
     },
 
     async createTags(id: Expense['id'], tags: Tag['id'][]): Promise<void> {

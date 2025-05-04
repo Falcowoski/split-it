@@ -1,12 +1,17 @@
-# DivideAí (SplitIt)
+# Split It
 
 Um aplicativo para gestão financeira familiar, permitindo dividir despesas entre membros da família. 
 Baseado no SplitWise, mas focado no cenário familiar.
 
+> [!IMPORTANT]
+> Este projeto está sendo feito com **Claude 3.7 Sonnet** de forma similar a *vibe coding*, mas ao mesmo tempo como forma de estudar **React Native** e **Tailwind**.
+> 
+> Sou um desenvolvedor com experiência na web e não no mundo *mobile*, então tudo ainda está sendo um grande aprendizado 💫
+
 ## Sobre o Projeto
 
 Este é um MVP (Minimum Viable Product) de um aplicativo para gestão de despesas compartilhadas. 
-O DivideAí permite registrar despesas em grupos e acompanhar quem pagou o quê.
+O Split It permite registrar despesas em grupos e acompanhar quem pagou o quê.
 
 ## Tecnologias Utilizadas
 
@@ -46,7 +51,7 @@ O DivideAí permite registrar despesas em grupos e acompanhar quem pagou o quê.
 Para gerar um APK:
 
 ```bash
-expo build -t apk
+npx eas-cli@latest build -p android --profile local
 ```
 
 ## Funcionalidades

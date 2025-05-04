@@ -14,15 +14,12 @@ import { tagService } from '../../services/tagService';
 import Animated from 'react-native-reanimated';
 import ExpenseFields, { FormData } from './ExpenseFields';
 
-type CreateExpenseScreenRouteProp = RouteProp<
-    RootStackParamList,
-    'CreateExpense'
->;
+type EditExpenseScreenRouteProp = RouteProp<RootStackParamList, 'EditExpense'>;
 
-export default function CreateExpenseScreen() {
+export default function EditExpenseScreen() {
     const navigation = useNavigation();
-    const route = useRoute<CreateExpenseScreenRouteProp>();
-    const { groupId } = route.params;
+    const route = useRoute<EditExpenseScreenRouteProp>();
+    const { id } = route.params;
     const { showToast } = useToast();
 
     const [loading, setLoading] = useState(true);
@@ -34,6 +31,7 @@ export default function CreateExpenseScreen() {
         control,
         handleSubmit,
         formState: { errors },
+        setValue,
     } = useForm<FormData>({
         defaultValues: {
             name: '',
@@ -49,8 +47,9 @@ export default function CreateExpenseScreen() {
             try {
                 setLoading(true);
 
-                const [usersData, paymentMethodsData, tagsData] =
+                const [expenseData, usersData, paymentMethodsData, tagsData] =
                     await Promise.all([
+                        expenseService.getById(id),
                         userService.getAll(),
                         paymentMethodService.getAll(),
                         tagService.getAll(),
@@ -59,12 +58,29 @@ export default function CreateExpenseScreen() {
                 setUsers(usersData);
                 setPaymentMethods(paymentMethodsData);
                 setTags(tagsData);
+
+                if (!expenseData) throw new Error('Something went wrong');
+
+                // Preencher os campos do formulário com os dados da despesa
+                setValue('name', expenseData.name);
+                setValue('amount', String(expenseData.amount));
+                setValue('userId', expenseData.user_id);
+                setValue('paymentMethodId', expenseData.payment_method_id);
+
+                // Se a despesa já tiver tags, preencher o campo de tags
+                if (expenseData.tags && Array.isArray(expenseData.tags)) {
+                    setValue(
+                        'tags',
+                        expenseData.tags.map((tag) => tag.id),
+                    );
+                }
             } catch (error) {
                 console.error('Erro ao carregar dados:', error);
                 showToast(
                     'Não foi possível carregar os dados necessários',
                     'error',
                 );
+                navigation.goBack();
             } finally {
                 setLoading(false);
             }
@@ -72,7 +88,7 @@ export default function CreateExpenseScreen() {
 
         loadData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [id, setValue]);
 
     const onSubmit = async (data: FormData) => {
         try {
@@ -96,9 +112,9 @@ export default function CreateExpenseScreen() {
                 return;
             }
 
-            await expenseService.create(
+            await expenseService.update(
+                id,
                 {
-                    group_id: groupId,
                     user_id: data.userId,
                     payment_method_id: data.paymentMethodId,
                     name: data.name,
@@ -107,11 +123,11 @@ export default function CreateExpenseScreen() {
                 data.tags,
             );
 
-            showToast('Despesa criada com sucesso', 'success');
+            showToast('Despesa atualizada com sucesso', 'success');
             navigation.goBack();
         } catch (error) {
-            console.error('Erro ao criar despesa:', error);
-            showToast('Não foi possível criar a despesa', 'error');
+            console.error('Erro ao atualizar despesa:', error);
+            showToast('Não foi possível atualizar a despesa', 'error');
         }
     };
 
@@ -124,7 +140,7 @@ export default function CreateExpenseScreen() {
         return (
             <View className="flex-1 items-center justify-center bg-neutral-50 p-4">
                 <Text className="mb-4 text-xl font-bold">
-                    Não é possível criar uma despesa
+                    Não é possível editar a despesa
                 </Text>
                 <Text className="mb-6 text-center text-neutral-600">
                     {users.length === 0
@@ -145,9 +161,7 @@ export default function CreateExpenseScreen() {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator
         >
-            <Text className="mb-6 text-xl font-bold">
-                Adicionar nova despesa
-            </Text>
+            <Text className="mb-6 text-xl font-bold">Editar despesa</Text>
 
             <ExpenseFields
                 control={control}
@@ -158,7 +172,7 @@ export default function CreateExpenseScreen() {
             />
 
             <Button
-                title="Criar"
+                title="Salvar"
                 onPress={handleSubmit(onSubmit)}
                 className="mt-4"
             />

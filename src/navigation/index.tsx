@@ -15,6 +15,8 @@ import CreateUserScreen from '../screens/users/CreateUserScreen';
 import PaymentMethodsScreen from '../screens/paymentMethods/PaymentMethodsScreen';
 import CreatePaymentMethodScreen from '../screens/paymentMethods/CreatePaymentMethodScreen';
 import CreateExpenseScreen from '../screens/expenses/CreateExpenseScreen';
+import { Expense } from '../types';
+import EditExpenseScreen from '../screens/expenses/EditExpenseScreen';
 
 // Definir tipos para navegação
 export type RootStackParamList = {
@@ -24,6 +26,7 @@ export type RootStackParamList = {
     CreateUser: undefined;
     CreatePaymentMethod: undefined;
     CreateExpense: { groupId: string };
+    EditExpense: { id: Expense['id'] };
 };
 
 export type TabParamList = {
@@ -118,30 +121,41 @@ export const AppNavigator = () => (
                 component={TabNavigator}
                 options={{ headerShown: false }}
             />
+
             <Stack.Screen
                 name="GroupDetail"
                 component={GroupDetailScreen}
                 options={{ title: 'Detalhes do grupo' }}
             />
+
             <Stack.Screen
                 name="CreateGroup"
                 component={CreateGroupScreen}
                 options={{ title: 'Novo grupo' }}
             />
+
             <Stack.Screen
                 name="CreateUser"
                 component={CreateUserScreen}
                 options={{ title: 'Novo usuário' }}
             />
+
             <Stack.Screen
                 name="CreatePaymentMethod"
                 component={CreatePaymentMethodScreen}
                 options={{ title: 'Nova forma de pagamento' }}
             />
+
             <Stack.Screen
                 name="CreateExpense"
                 component={CreateExpenseScreen}
                 options={{ title: 'Nova despesa' }}
+            />
+
+            <Stack.Screen
+                name="EditExpense"
+                component={EditExpenseScreen}
+                options={{ title: 'Editar despesa' }}
             />
         </Stack.Navigator>
     </NavigationContainer>
